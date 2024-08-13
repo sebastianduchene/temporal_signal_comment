@@ -1,0 +1,21 @@
+<!-- Basic birth-death simulation with two contemporanous uniform sampling events. -->
+
+<beast version="2.0" namespace="beast.base.inference.parameter
+                                :beast.base.inference
+                                :remaster
+                                :beast.base.evolution.tree.coalescent">
+    <run spec="Simulator" nSims="1">
+        <simulate id="tree" spec="SimulatedTree">
+                <trajectory id="traj" spec="CoalescentTrajectory" maxTrajLogAge="10000">
+                    <population id="C" spec="ConstantPopulation" popSize="1000"/>
+                    <!--reaction spec="PunctualReaction" n="87 9 3 1" times="0 8.8 20.3 73.77"-->
+                    <reaction spec="PunctualReaction" n="INPUT_NUM_SAMPLES" times="INPUT_TIMES">
+                        0 -> C
+                    </reaction>
+                </trajectory>
+        </simulate>
+        <logger spec="Logger" mode="tree" fileName="coal_trees.tree">
+            <log spec="TypedTreeLogger" tree="@tree"/>
+        </logger>
+    </run>
+</beast>
