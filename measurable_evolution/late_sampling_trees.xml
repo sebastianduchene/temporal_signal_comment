@@ -1,0 +1,38 @@
+<!-- Basic birth-death simulation with two contemporanous uniform sampling events. -->
+
+<beast version="2.0" namespace="beast.base.inference.parameter:beast.base.inference:remaster">
+    <run spec="Simulator" nSims="100">
+        <simulate spec="SimulatedTree" id="tree">
+            <trajectory spec="StochasticTrajectory" id="traj" maxRetries="10" endsWhen="sample==100"> <!-- sample 100 tips -->
+                <population spec="RealParameter" id="X" value="1"/>
+                <samplePopulation spec="RealParameter" id="sample" value="0"/>
+
+                <!-- The parameters below imply R0=3 becomeUninfectious=0.125, duration of infection=8 years.
+                    We sample with a probabilty of 1.0, but only after 22 years of the 
+                    start of the outbreak. I am using a TB like example, where the genome size
+                    is 4.3Mb and a subst rate of 1e-7 subs/site/year. So we would expect about 
+                    2.3 years for each substitution to arise. In the resulting trees the sampling
+                    time span only about 2 years we expect no substitutions _in the sampling time span_.
+                    However, note that there is some variance because the complete processs can be much 
+                    longer (length of the root node?)
+                    To do: contrast with constant sampling at a much lower rate, so that samples span 
+                    the length of the oubtreak-->
+                <reaction spec="Reaction" rate="0.375"> X -> 2X </reaction>
+                <reaction spec="Reaction" rate="0.125 0" changeTimes="22"> X -> 0 </reaction>
+                <reaction spec="Reaction" rate="0 0.125 " changeTimes="22"> X -> sample </reaction>
+            </trajectory>
+        </simulate>
+
+        <logger spec="Logger" fileName="simulation_testing.traj">
+            <log idref="traj"/>
+        </logger>
+
+        <logger spec="Logger" mode="tree" fileName="simulation_testing.trees">
+            <log spec="TypedTreeLogger" tree="@tree"/>
+        </logger>
+
+        <logger spec="Logger">
+            <log spec="beast.base.evolution.tree.TreeStatLogger" tree="@tree"/>
+        </logger>
+    </run>
+</beast>
