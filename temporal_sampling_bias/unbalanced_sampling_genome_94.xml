@@ -36,7 +36,7 @@
     <map name="InverseGamma" >beast.base.inference.distribution.InverseGamma</map>
     <map name="OneOnX" >beast.base.inference.distribution.OneOnX</map>
 
-    <run id="mcmc" spec="MCMC" chainLength="10000000">
+    <run id="mcmc" spec="MCMC" chainLength="500000000">
         <state id="state" spec="State" storeEvery="5000">
             <tree id="tree" name="stateNode" taxonset="@taxonSet">
                 <trait id="traitSet" spec="feast.fileio.TraitSetFromTaxonSet" delimiter="_" everythingAfterLast="true" traitname="date-backward">
@@ -159,7 +159,7 @@
         <operator id="CoalescentConstantWilsonBalding" spec="WilsonBalding" tree="@tree" weight="3.0"/>
         <operator id="PopSizeScaler" spec="kernel.BactrianScaleOperator" parameter="@popSize" upper="10.0" weight="3.0"/>
 
-        <logger id="tracelog" spec="Logger" fileName="unbalanced_sampling_genome_94.log" logEvery="1000" model="@posterior" sanitiseHeaders="true" sort="smart">
+        <logger id="tracelog" spec="Logger" fileName="unbalanced_sampling_genome_94.log" logEvery="10000" model="@posterior" sanitiseHeaders="true" sort="smart">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>
@@ -174,7 +174,7 @@
             <log idref="popSize"/>
             <log idref="CoalescentConstant"/>
         </logger>
-        <logger id="screenlog" spec="Logger" logEvery="1000">
+        <logger id="screenlog" spec="Logger" logEvery="10000">
             <log idref="posterior"/>
             <log idref="likelihood"/>
             <log idref="prior"/>

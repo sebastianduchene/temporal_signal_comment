@@ -14,9 +14,9 @@ for(i in 1:100){
   # This means that on average the difference in sampling times is about 8,500, but can be about twice as high.
   sampling_times <- sort(round(rexp(5, 1/4000), 2))
 
-  #sampled_data <- sort(sample(sampling_times, size = 100, replace = T, prob  =  (max(sampling_times) / sampling_times))) # This is biased sampling because older dates have a lower probability of being sampled
+  sampled_data <- sort(sample(sampling_times, size = 100, replace = T, prob  =  (max(sampling_times) / sampling_times))) # This is biased sampling because older dates have a lower probability of being sampled
 
-  sampled_data <- sort(sample(sampling_times, size = 100, replace = T)) # This is uniform sampling
+#  sampled_data <- sort(sample(sampling_times, size = 100, replace = T)) # This is uniform sampling
 
   sampled_data <- sampled_data - min(sampled_data)
   sampling_summary <- table(sampled_data)
@@ -53,3 +53,23 @@ for(i in 1:100){
 class(simulated_trees) <- "multiPhylo"
 
 write.tree(simulated_trees, file = "balanced_sampling_trees.trees")
+
+
+
+#####################
+#####################
+
+
+sampling_times <- sort(round(rexp(5, 1/4000), 2))
+
+sampling_probs <- (max(sampling_times) / sampling_times)
+sampling_probs <- sampling_probs / sum(sampling_probs)
+sampling_probs
+
+sampled_data <- sort(sample(sampling_times, size = 100, replace = T, prob  =  (max(sampling_times) / sampling_times))) # This is biased sampling because older dates have a lower probability of being sampled
+
+plot(sampled_data, rnorm(length(sampled_data)) + rep(1, length(sampled_data)))
+
+
+unbalanced_stats[which.min(abs(1e-5 - unbalanced_stats$mean)), ]
+
